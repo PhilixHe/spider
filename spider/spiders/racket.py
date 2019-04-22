@@ -7,7 +7,6 @@ from ..items import db_session, Racket
 class RacketSpider(scrapy.Spider):
     name = 'racket'
     allowed_domains = ['tabletennis-reference.com']
-    racketid = 1
 
     def start_requests(self):
         switch = True
@@ -26,7 +25,8 @@ class RacketSpider(scrapy.Spider):
             items['racketid'] = response.url.split('/')[-1]
             items['name'] = response.xpath('//*[@id="dtlMainBlk"]/h2/text()').get()
 
-            td2 = response.xpath('//*[@id="dtlMainBlk"]/div/div[1]/table//td[@class="top-content"]')
+            td2 = response.xpath('//*[@id="dtlMainBlk"]/div/div[@class="top-hardness MB10"][1]/table//td['
+                                 '@class="top-content"]')
             rate = td2.xpath('string(.)').get()
             if rate:
                 rate = rate.strip()

@@ -53,8 +53,8 @@ class Rubber(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     rubberid = Column(Integer, default=0, index=True)
     name = Column(String(255), default='')
-    img_link = Column(String(255), default='')
     rate = Column(String(255), default='')
+    img_link = Column(String(255), default='')
     property = Column(Text, default='[]')
     classify = Column(Text, default='[]')
     description = Column(Text, default='')
@@ -69,6 +69,38 @@ class Racket(Base):
     racketid = Column(Integer, default=0, index=True)
     name = Column(String(255), default='')
     rate = Column(String(255), default='')
+    img_link = Column(String(255), default='')
+    property = Column(Text, default='[]')
+    classify = Column(Text, default='[]')
+    description = Column(Text, default='')
+    # json 数据 eg: [["Speed", "12.4"], ["Touch", "12.5"]]
+    specifications = Column(Text, default='[]')
+
+
+class RubberJP(Base):
+    __tablename__ = "RubberJP"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    rubberid = Column(Integer, default=0, index=True)
+    name = Column(String(255), default='')
+    rate = Column(String(255), default='')
+    price = Column(String(100), default='0')
+    img_link = Column(String(255), default='')
+    property = Column(Text, default='[]')
+    classify = Column(Text, default='[]')
+    description = Column(Text, default='')
+    # json数据 eg: [["Producer", 'Butterfly'], ["Product code", "23950"]]
+    specifications = Column(Text, default='[]')
+
+
+class RacketJP(Base):
+    __tablename__ = "RacketJP"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    racketid = Column(Integer, default=0, index=True)
+    name = Column(String(255), default='')
+    rate = Column(String(255), default='')
+    price = Column(String(100), default='0')
     img_link = Column(String(255), default='')
     property = Column(Text, default='[]')
     classify = Column(Text, default='[]')

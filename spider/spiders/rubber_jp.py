@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import logging
-from ..items import db_session, Rubber
+from ..items import db_session, RubberJP
 
 
-class RubberSpider(scrapy.Spider):
-    name = 'rubber'
-    allowed_domains = ['tabletennis-reference.com']
+class RubberJPSpider(scrapy.Spider):
+    name = 'rubber_jp'
+    allowed_domains = ['takkyu-navi.jp']
 
     def start_requests(self):
         switch = True
         rubberid = 1
-        url = 'https://tabletennis-reference.com/rubber/detail/'
+        url = 'https://takkyu-navi.jp/rubber/detail/'
 
         while switch:
-            racket = db_session.query(db_session.query(Rubber).filter(Rubber.rubberid == rubberid).exists()).scalar()
+            racket = db_session.query(db_session.query(RubberJP).filter(RubberJP.rubberid == rubberid).exists()).scalar()
             if not racket:
                 yield scrapy.Request(url='%s%s' % (url, rubberid), callback=self.parse)
                 rubberid += 1
@@ -33,12 +33,19 @@ class RubberSpider(scrapy.Spider):
                 rate = rate.strip()
 
             items['rate'] = rate
+
+            items['price'] = response.xpath('//*[@id="dtlMainBlk"]/div/div[@class="top-hardness MB10"][2]//span['
+                                            '@class="top-numerical"]/text()').get()
+
             items['img_link'] = response.xpath('//*[@id="dtlMainBlk"]/div/div[@class="imgBox clearfix"]/div['
                                                '@class="floatL"]//img/@src').get()
+
             items['property'] = response.xpath(
                 '//*[@id="dtlMainBlk"]//div[@class="pointBoxWrap"]//span/text()').extract()
+
             items['description'] = response.xpath(
                 '//*[@id="dtlMainBlk"]/div/dl/dd[@itemprop="description"]//p/text()').get()
+
             items['classify'] = response.xpath('//*[@id="dtlMainBlk"]/div/ul//span/text()').extract()
 
             specifications = []
