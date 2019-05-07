@@ -51,4 +51,4 @@ class RubberSpider(scrapy.Spider):
             return items
 
         else:
-            raise Exception("+++++++++++++++++++\nRequest URL: %s \nHTTP Code: %s" % (response.url, response.status))
+            logging.error("+++++++++++++++++++Request URL: %s \tHTTP Code: %s" % (response.url, response.status))
