@@ -56,9 +56,13 @@ class SpiderPipeline(object):
             for com in item['comments']:
                 racket.comments.append(Comments(
                     name=com['name'],
+                    chart_head=com['chart_head'],
+                    table_tennis_history=com['table_tennis_history'],
                     attribute=json.dumps(com['attribute']),
                     description=com['description'],
-                    date=com['date']
+                    recommend=json.dumps(com['recommend']),
+                    date=com['date'],
+                    praise=com['praise']
                 ))
             db_session.add(racket)
             db_session.commit()
@@ -79,9 +83,13 @@ class SpiderPipeline(object):
             for com in item['comments']:
                 rubber.comments.append(Comments(
                     name=com['name'],
+                    chart_head=com['chart_head'],
+                    table_tennis_history=com['table_tennis_history'],
                     attribute=json.dumps(com['attribute']),
                     description=com['description'],
-                    date=com['date']
+                    recommend=json.dumps(com['recommend']),
+                    date=com['date'],
+                    praise=com['praise']
                 ))
 
             db_session.add(rubber)
@@ -95,9 +103,13 @@ class SpiderPipeline(object):
                 rubber_comment = Comments(
                     rubber=rubber_jp,
                     name=comment['name'],
+                    chart_head=comment['chart_head'],
+                    table_tennis_history=comment['table_tennis_history'],
                     attribute=json.dumps(comment['attribute']),
                     description=comment['description'],
-                    date=comment['date']
+                    recommend=json.dumps(comment['recommend']),
+                    date=comment['date'],
+                    praise=comment['praise']
                 )
                 comments.append(rubber_comment)
 
@@ -112,9 +124,13 @@ class SpiderPipeline(object):
                 rubber_comment = Comments(
                     racket=racket_jp,
                     name=comment['name'],
+                    chart_head=comment['chart_head'],
+                    table_tennis_history=comment['table_tennis_history'],
                     attribute=json.dumps(comment['attribute']),
                     description=comment['description'],
-                    date=comment['date']
+                    recommend=json.dumps(comment['recommend']),
+                    date=comment['date'],
+                    praise=comment['praise']
                 )
                 comments.append(rubber_comment)
 

@@ -123,9 +123,13 @@ class Comments(Base):
     racket = relationship('RacketJP', backref=backref('comments'))
     rubber = relationship('RubberJP', backref=backref('comments'))
     name = Column(String(255), default='')
+    chart_head = Column(String(255), default='')
+    table_tennis_history = Column(String(255), default='')
+    recommend = Column(Text, default='[]')
     attribute = Column(Text, default='[]')
     description = Column(Text, default='')
     date = Column(String(50), default='')
+    praise = Column(Integer, default=0)
 
 
 Base.metadata.create_all(engine)

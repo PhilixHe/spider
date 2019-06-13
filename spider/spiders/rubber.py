@@ -37,8 +37,8 @@ class RubberSpider(scrapy.Spider):
                                                '@class="floatL"]//img/@src').get()
             items['property'] = response.xpath(
                 '//*[@id="dtlMainBlk"]//div[@class="pointBoxWrap"]//span/text()').extract()
-            items['description'] = response.xpath(
-                '//*[@id="dtlMainBlk"]/div/dl/dd[@itemprop="description"]//p/text()').get()
+            desc_dom = response.xpath('//*[@id="dtlMainBlk"]/div//dl[@class="desc"]')
+            items['description'] = desc_dom.xpath('string(.)').get()
             items['classify'] = response.xpath('//*[@id="dtlMainBlk"]/div/ul//span/text()').extract()
 
             specifications = []

@@ -30,8 +30,8 @@ class SportsmanSpider(scrapy.Spider):
                 items['img_link'] = response.xpath('//*[@id="dtlMainBlk"]/div[@class="inner"]//div[@class="col-sm-5 '
                                                    'modalThums"]//a[@href="#myModal_1"][1]/img/@src').get()
 
-                items['description'] = response.xpath('//*[@id="dtlMainBlk"]/div[@class="inner"]//dd['
-                                                      '@itemprop="description"]//p/text()').get()
+                desc_dom = response.xpath('//*[@id="dtlMainBlk"]/div[@class="inner"]//dl[@class="desc"]')
+                items['description'] = ''.join(desc_dom.xpath('string(.)').extract())
 
                 info = []
                 for div in response.xpath('//*[@id="dtlMainBlk"]//div[@class="dataBox2"]//div'):

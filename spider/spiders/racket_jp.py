@@ -2,6 +2,7 @@
 import scrapy
 import logging
 from ..items import db_session, RacketJP
+from ..spiders import table_tennis_comments_parse
 
 
 class RacketJPSpider(scrapy.Spider):
@@ -41,8 +42,8 @@ class RacketJPSpider(scrapy.Spider):
             items['property'] = response.xpath(
                 '//*[@id="dtlMainBlk"]//div[@class="pointBoxWrap"]//span/text()').extract()
 
-            items['description'] = response.xpath(
-                '//*[@id="dtlMainBlk"]/div/dl/dd[@itemprop="description"]//p/text()').get()
+            desc_dom = response.xpath('//*[@id="dtlMainBlk"]/div//dl[@class="desc"]')
+            items['description'] = desc_dom.xpath('string(.)').get()
 
             items['classify'] = response.xpath('//*[@id="dtlMainBlk"]/div/ul//span/text()').extract()
 
@@ -54,34 +55,9 @@ class RacketJPSpider(scrapy.Spider):
                     specifications.append([key, val])
             items['specifications'] = specifications
 
-            first_page_comments = self.comments_parse(response)
+            first_page_comments = table_tennis_comments_parse(response)
             items['comments'] = first_page_comments
             yield items
 
         else:
             logging.error("+++++++++++++++++++Request URL: %s \tHTTP Code: %s" % (response.url, response.status))
-
-    def comments_parse(self, response):
-        comments = response.xpath('//div[@id="usrRevBlk"]/ul//li')
-        comment_set = []
-        for comment in comments:
-
-            name_node = comment.xpath('.//dt[@class="usrBox clearfix"]//em[@itemprop="author"]')
-            name = name_node.xpath('string(.)').get().strip()
-
-            trs = comment.xpath('.//dd[@class="usrEvl clearfix"]//div[@class="floatR"]/table//tr')
-            attribute = []
-            for tr in trs:
-                attribute.append(tr.xpath('string(.)').get().split())
-
-            description = comment.xpath('.//dd[@class="usrEvl clearfix"]//div[@class="comnt"]['
-                                        '@itemprop="description"]/p').xpath('string(.)').get()
-            date = comment.xpath('.//dd[@class="usrEvl clearfix"]//small[@class="date"]/text()').get()
-            cm = dict()
-            cm['name'] = name
-            cm['attribute'] = attribute
-            cm['description'] = description
-            cm['date'] = date
-            comment_set.append(cm)
-
-        return comment_set

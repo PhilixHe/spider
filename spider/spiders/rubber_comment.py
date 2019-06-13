@@ -2,6 +2,7 @@
 import scrapy
 import logging
 from ..items import db_session, RubberJP
+from ..spiders import table_tennis_comments_parse
 
 
 class RubberCommentSpider(scrapy.Spider):
@@ -29,34 +30,9 @@ class RubberCommentSpider(scrapy.Spider):
     def comment_page_parse(self, response):
         if response.status == 200:
             rubber_id = response.meta['rubber_id']
-            comments = self.comments_parse(response)
+            comments = table_tennis_comments_parse(response)
 
             yield {'rubber_id': rubber_id, 'comments': comments}
 
         else:
             logging.error("+++++++++++++++++++Request URL: %s \tHTTP Code: %s" % (response.url, response.status))
-
-    def comments_parse(self, response):
-        comments = response.xpath('//div[@id="usrRevBlk"]/ul//li')
-        comment_set = []
-        for comment in comments:
-
-            name_node = comment.xpath('.//dt[@class="usrBox clearfix"]//em[@itemprop="author"]')
-            name = name_node.xpath('string(.)').get().strip()
-
-            trs = comment.xpath('.//dd[@class="usrEvl clearfix"]//div[@class="floatR"]/table//tr')
-            attribute = []
-            for tr in trs:
-                attribute.append(tr.xpath('string(.)').get().split())
-
-            description = comment.xpath('.//dd[@class="usrEvl clearfix"]//div[@class="comnt"]['
-                                        '@itemprop="description"]/p').xpath('string(.)').get()
-            date = comment.xpath('.//dd[@class="usrEvl clearfix"]//small[@class="date"]/text()').get()
-            cm = dict()
-            cm['name'] = name
-            cm['attribute'] = attribute
-            cm['description'] = description
-            cm['date'] = date
-            comment_set.append(cm)
-
-        return comment_set
